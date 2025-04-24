@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zufallsgenerator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: #A9CBB7; /* Hintergrundfarbe geändert */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      text-align: center;
+      color: #222;
+    }
+
+    header {
+      padding: 30px 0 10px;
+    }
+
+    header img {
+      border: none; /* Bild ohne Umrandung */
+      width: 300px; /* Breite auf 300px gesetzt */
+      height: auto; /* Höhe passt sich der Breite an */
+      object-fit: cover; /* Bild bleibt unverzerrt */
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin: 25px 0 15px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 20px; /* Verringert den Abstand zwischen der Überschrift und den Themen */
+    }
+
+    #display {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      font-size: 1.6rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 20px 45px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 999px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #111;
+    }
+
+    #retryButton {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 25px;
+      font-size: 1.1rem;
+      opacity: 0.85;
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      main {
+        margin-top: 8vh;
+      }
+
+      #display {
+        font-size: 1.3rem;
+        padding: 25px;
+      }
+
+      button {
+        font-size: 1.4rem;
+        padding: 18px 40px;
+      }
+
+      #retryButton {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://github.com/traumfunke/test3/blob/main/Cheers%20to%20Us.png?raw=true" alt="Mein Bild" />
+  </header>
+
+  <h1>Zukunftsblicke</h1>
+
+  <main>
+    <div id="display"></div>
+    <button id="startButton" onclick="startRoll()">Start</button>
+  </main>
+
+  <button id="retryButton" onclick="restart()">Nochmal</button>
+
+  <script>
+    const begriffe = [
+      "Wo siehst du uns in fünf Jahren?",
+      "Was ist dein größter Wunsch für unsere gemeinsame Zukunft?",
+      "Welche Abenteuer willst du mit mir noch erleben?",
+      "Wie stellst du dir unser gemeinsames Zuhause vor?",
+      "Was wäre unser perfekter Ruhestand?",
+      "Welche gemeinsamen Rituale könnten wir einführen?",
+      "Wenn wir ein Projekt starten würden – was wäre das?",
+      "Welche Länder wollen wir unbedingt zusammen bereisen?",
+      "Welche Traditionen möchten wir selbst erschaffen?",
+      "Was für eine Beziehung wollen wir als Vorbild leben?",
+      "Was möchtest du in den nächsten Jahren von mir lernen?",
+      "Was glaubst du, wie sich unsere Beziehung noch entwickeln wird?",
+      "Wenn wir ein Haustier hätten – welches wäre typisch für uns?",
+      "Was könnten wir tun, um unser Liebesleben frisch zu halten?",
+      "Was bedeutet für dich 'gemeinsam alt werden'?",
+      "Wollen wir irgendwann gemeinsam etwas bauen oder gestalten?",
+      "Wie möchten wir mit Herausforderungen in Zukunft umgehen?",
+      "Welche Vision hast du für unser nächstes Jahr?",
+      "Welche Träume möchtest du nicht allein, sondern mit mir verwirklichen?",
+      "Wie könnten wir unsere Liebe sichtbar nach außen tragen?",
+      "Was würdest du in unserem Alltag gerne verändern?",
+      "Wie sieht ein perfekter Sonntag in der Zukunft aus?",
+      "Welche Jahreszeit passt am besten zu unserer Zukunft?",
+      "Wenn wir einen Garten hätten – wie sähe er aus?",
+      "Welche Fähigkeiten könnten wir gemeinsam entwickeln?",
+      "Was wäre ein schöner gemeinsamer Meilenstein in 2 Jahren?",
+      "Welche Wünsche hast du für uns als Paar in Krisenzeiten?",
+      "Wenn wir ein Fest planen würden – wie sähe es aus?",
+      "Welche Sache sollten wir beide mal zum ersten Mal tun?",
+      "Wenn du an unsere Beziehung in 20 Jahren denkst – was siehst du?",
+      "Was macht uns langfristig stark als Team?",
+      "Was wäre unser Traumjob als Duo?",
+      "Was würdest du gern mit mir gemeinsam erschaffen?",
+      "Wie können wir gemeinsam wachsen – als Menschen und Paar?",
+      "Wenn wir ein Familienritual hätten – wie sähe es aus?",
+      "Wie stellst du dir unser Leben mit Kindern (oder ohne) vor?",
+      "Was für eine gemeinsame Erinnerung würdest du am liebsten schon heute in die Zukunft legen?",
+      "Was können wir heute tun, worauf wir in zehn Jahren stolz sein werden?",
+      "Wenn unsere Beziehung ein Buch wäre – wie würde das nächste Kapitel heißen?",
+      "Was möchtest du nie aus den Augen verlieren – auch in der Zukunft?"
+    ];
+
+    let interval;
+
+    function startRoll() {
+      const display = document.getElementById("display");
+      const startButton = document.getElementById("startButton");
+      const retryButton = document.getElementById("retryButton");
+      
+      startButton.style.display = "none"; // Hide the start button
+      display.style.display = "block"; // Show the display div
+
+      let index = 0;
+
+      interval = setInterval(() => {
+        display.textContent = begriffe[index];
+        index = (index + 1) % begriffe.length;
+      }, 150);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        display.textContent = begriffe[Math.floor(Math.random() * begriffe.length)];
+        retryButton.style.display = "inline-block";
+      }, 3000);
+    }
+
+    function restart() {
+      const display = document.getElementById("display");
+      const retryButton = document.getElementById("retryButton");
+      const startButton = document.getElementById("startButton");
+
+      retryButton.style.display = "none";
+      display.style.display = "none";
+      startButton.style.display = "inline-block";
+    }
+  </script>
+</body>
+</html>
